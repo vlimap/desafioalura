@@ -1,0 +1,45 @@
+### Listar todas as Tarefas
+GET http://localhost:3001/api/tarefas
+Accept: application/json
+
+###
+
+### Criar uma Nova Tarefa
+POST http://localhost:3001/api/tarefas
+Content-Type: application/json
+
+{
+  "titulo": "tarefa 1",
+  "descricao": "Descrição da nova tarefa 2",
+  "prioridade": "Alta",
+  "data": "2024-12-31",
+  "responsaveis": ["Usuário 1","Usuário 2" ],
+  "status": "Pendente"
+}
+
+###
+
+### Obter uma Tarefa Específica
+GET http://localhost:3001/api/tarefas/66b2b1ba04f1754617923add
+Accept: application/json
+
+###
+
+### Atualizar uma Tarefa
+PUT http://localhost:3001/api/tarefas/66b2b1ba04f1754617923add
+Content-Type: application/json
+
+{
+  "titulo": "Tarefa Atualizada",
+  "descricao": "Descrição atualizada",
+  "prioridade": "Média",
+  "dataEntrega": "2024-12-31",
+  "responsaveis": ["Usuário 2"],
+  "status": "Concluída"
+}
+
+###
+
+### Excluir uma Tarefa
+DELETE http://localhost:3001/api/tarefas/{ID_DA_TAREFA}
+

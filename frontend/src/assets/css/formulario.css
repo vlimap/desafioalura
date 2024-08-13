@@ -1,0 +1,85 @@
+/* Ajuste geral para o formulário de criação de tarefas */
+.formulario-tarefas {
+    border: 1px solid var(--cinza-tundora);
+    padding: 24px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background-color: var(--branco);
+    max-width: 960px;
+    margin: 40px auto; /* Adiciona um espaçamento entre o menu e o formulário */
+}
+
+/* Ajuste para as linhas inteiras no formulário */
+.formulario-tarefas--linha-inteira {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+}
+
+/* Ajuste para dividir o formulário em duas metades */
+.formulario-tarefas--linha-metade {
+    display: flex;
+    width: 100%;
+    gap: 16px;
+}
+
+/* Ajuste para as colunas dentro das metades */
+.formulario-tarefas--coluna {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+/* Estilo para os inputs e selects */
+.input--borda {
+    border: 1px solid var(--cinza-tundora);
+    border-radius: 8px;
+    padding: 8px;
+    width: 100%;
+}
+
+/* Estilo para textarea */
+.input-textarea {
+    resize: none;
+}
+
+/* Estilo para os botões */
+.formulario-tarefas__botao {
+    border: 1px solid var(--cinza-tundora);
+    border-radius: 8px;
+    width: 172px;
+    padding: 8px 0;
+    margin-top: 16px;
+    transition: all 0.25s;
+    background-color: var(--cinza-tundora);
+    color: var(--branco);
+}
+
+/* Estilo para botões ao passar o mouse */
+.formulario-tarefas__botao:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+/* Estilo para o checkbox */
+.container__checkbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+/* Estilo para cada item de checkbox */
+.container__checkbox--item {
+    display: flex;
+    gap: 4px;
+}
+
+/* Ajuste para o campo de Data */
+input[type="date"] {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--cinza-tundora);
+}

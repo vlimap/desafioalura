@@ -1,0 +1,12 @@
+@import url('./fontes.css');
+@import url('./variaveis.css');
+@import url('./reset.css');
+@import url('./formulario.css');
+@import url('./tarefa.css');
+
+.conteudo-principal {
+    max-width: 960px; 
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 0px; 
+}

@@ -1,0 +1,23 @@
+.search-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-busca {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .search-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 8px;
+  }
+  
+  .search-icon {
+    color: #333;
+  }
+  
