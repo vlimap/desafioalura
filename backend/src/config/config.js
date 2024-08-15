@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const uri = 'mongodb://127.0.0.1:27017/tarefas';
+// Pegando a URI do MongoDB a partir do arquivo .env
+const uri = process.env.MONGODB_URI;
 
 if (!uri) {
   console.error("Erro: MONGODB_URI não está definida no arquivo .env.");
   process.exit(1);
 }
 
-mongoose.connect(uri)
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Conectado ao MongoDB');
   })

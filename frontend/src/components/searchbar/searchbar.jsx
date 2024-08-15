@@ -20,7 +20,7 @@ function SearchBar({ searchTerm, onSearchTermChange, onSearch }) {
   );
 }
 
-// Definindo as PropTypes
+// definindo as PropTypes
 SearchBar.propTypes = {
   searchTerm: PropTypes.string.isRequired, 
   onSearchTermChange: PropTypes.func.isRequired, 
