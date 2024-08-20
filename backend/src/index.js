@@ -18,6 +18,10 @@ app.use(express.json());
 // rotas
 app.use('/api/tarefas', taskRoutes); 
 
+
+app.use(express.static('build'));
+
+
 // iniciando servidor
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);

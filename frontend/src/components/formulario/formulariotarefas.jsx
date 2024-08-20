@@ -1,142 +1,207 @@
-import { useState } from 'react';
-import criarTarefa from '../../api/criarTarefa';
-import '../../../assets/css/formulario.css';
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import moment from "moment";
+import criarTarefa from "../../api/criarTarefa";
+import { RESPONSAVEIS } from "../../constantes/constante";
+import "./formulario.css";
 
-function FormularioTarefas() {
-  const [titulo, setTitulo] = useState('');
-  const [prioridade, setPrioridade] = useState('Alta');
-  const [data, setData] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [responsaveis, setResponsaveis] = useState([]);
+// Validação usando Yup
+const validationSchema = Yup.object().shape({
+  titulo: Yup.string()
+    .min(5, "O título deve ter no mínimo 5 caracteres")
+    .max(30, "O título deve ter no máximo 30 caracteres")
+    .required("O título é obrigatório"),
+  prioridade: Yup.string().required("A prioridade é obrigatória"),
+  data: Yup.date()
+    .required("A data é obrigatória")
+    .test(
+      "data-valida",
+      "A data de entrega deve ser hoje ou no futuro.",
+      (value) =>
+        moment(value).startOf("day").isSameOrAfter(moment().startOf("day"))
+    ),
+  descricao: Yup.string()
+    .max(150, "A descrição deve ter no máximo 150 caracteres")
+    .required("A descrição é obrigatória"),
+  responsaveis: Yup.array()
+    .min(1, "Selecione ao menos um responsável")
+    .required("Selecione ao menos um responsável"),
+});
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const FormularioTarefas = ({ onNovaTarefa }) => {
+  const initialValues = {
+    titulo: "",
+    prioridade: "Alta",
+    data: "",
+    descricao: "",
+    responsaveis: [],
+  };
+
+  const handleSubmit = async (values, { resetForm }) => {
     const novaTarefa = {
-      titulo,
-      prioridade,
-      data: formatarData(data),
-      descricao,
-      responsaveis,
+      titulo: values.titulo,
+      prioridade: values.prioridade,
+      data: moment(values.data).startOf("day").toISOString(),
+      descricao: values.descricao,
+      responsaveis: values.responsaveis,
     };
+
     try {
-      await criarTarefa(novaTarefa);
-      setTitulo('');
-      setPrioridade('Alta');
-      setData('');
-      setDescricao('');
-      setResponsaveis([]);
-      
+      const tarefaCriada = await criarTarefa(novaTarefa);
+      onNovaTarefa(tarefaCriada);
+      resetForm();
     } catch (error) {
-      console.error('Erro ao criar tarefa:', error);
+      console.error("Erro ao criar tarefa:", error);
     }
   };
 
   return (
-    <form id="formularioTarefas" className="formulario-tarefas" onSubmit={handleSubmit}>
-      <div className="formulario-tarefas--linha-inteira">
-        <div className="formulario-tarefas--linha-metade">
-          <div className="formulario-tarefas--coluna">
-            <label className="tituloTarefaForm">Título</label>
-            <input
-              id="tituloTarefaForm"
-              placeholder="Ex.: Revisar código crítico"
-              className="input--borda"
-              value={titulo}
-              onChange={(e) => setTitulo(e.target.value)}
-              required
-              minLength="5"
-              maxLength="30"
-            />
-          </div>
-        </div>
-        <div className="formulario-tarefas--linha-metade">
-          <div className="formulario-tarefas--coluna">
-            <label htmlFor="prioridadeTarefaForm">Prioridade</label>
-            <select
-              id="prioridadeTarefaForm"
-              className="input--borda"
-              value={prioridade}
-              onChange={(e) => setPrioridade(e.target.value)}
-            >
-              <option value="Alta">Alta</option>
-              <option value="Média">Média</option>
-              <option value="Baixa">Baixa</option>
-            </select>
-          </div>
-          <div className="formulario-tarefas--coluna">
-            <label htmlFor="dataTarefaForm">Data</label>
-            <input
-              type="date"
-              id="dataTarefaForm"
-              className="input--borda"
-              value={data}
-              onChange={(e) => setData(e.target.value)}
-              required
-            />
-          </div>
-        </div>
-      </div>
-      <div className="formulario-tarefas--linha-inteira">
-        <div className="formulario-tarefas--coluna">
-          <label htmlFor="descricaoTarefaForm">Descrição</label>
-          <textarea
-            id="descricaoTarefaForm"
-            placeholder="Revisar bugs críticos no módulo principal."
-            className="input-textarea input--borda"
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-            required
-            maxLength="150"
-          ></textarea>
-        </div>
-        <div className="formulario-tarefas--coluna">
-          <label htmlFor="responsavelTarefaForm">Responsável(is):</label>
-          <div className="container__checkbox">
-            {['Fulano 1', 'Fulano 2', 'Fulano 3', 'Fulano 4', 'Fulano 5', 'Fulano 6'].map((nome) => (
-              <div className="container__checkbox--item" key={nome}>
-                <input
-                  type="checkbox"
-                  id={nome}
-                  data-responsavel
-                  checked={responsaveis.includes(nome)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setResponsaveis([...responsaveis, nome]);
-                    } else {
-                      setResponsaveis(responsaveis.filter((resp) => resp !== nome));
-                    }
-                  }}
-                />
-                <label htmlFor={nome}>{nome}</label>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="formulario-tarefas--linha-inteira">
-        <button type="reset" className="formulario-tarefas__botao" onClick={() => {
-          setTitulo('');
-          setPrioridade('Alta');
-          setData('');
-          setDescricao('');
-          setResponsaveis([]);
-        }}>
-          Limpar
-        </button>
-        <button type="submit" className="formulario-tarefas__botao">
-          Adicionar
-        </button>
-      </div>
-    </form>
-  );
-}
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ values, setFieldValue }) => (
+        <Form
+          id="formularioTarefas"
+          className="formulario-tarefas"
+          aria-labelledby="formularioTarefasTitulo"
+        >
+          <h2
+            id="formularioTarefasTitulo"
+            className="formulario-tarefas__titulo"
+          >
+            Criar Nova Tarefa
+          </h2>
 
-function formatarData(data) {
-  if (data) {
-    const [ano, mes, dia] = data.split('-');
-    return `${ano}/${mes}/${dia}`;
-  }
-  return '';
-}
+          <div className="formulario-tarefas--linha-inteira">
+            <div className="formulario-tarefas--linha-metade">
+              <div className="formulario-tarefas--coluna">
+                <label htmlFor="tituloTarefaForm">Título</label>
+                <Field
+                  id="tituloTarefaForm"
+                  name="titulo"
+                  placeholder="Ex.: Revisar código crítico"
+                  className="input--borda"
+                  aria-required="true"
+                />
+                <ErrorMessage
+                  name="titulo"
+                  component="div"
+                  className="erro-mensagem"
+                />
+              </div>
+            </div>
+            <div className="formulario-tarefas--linha-metade">
+              <div className="formulario-tarefas--coluna">
+                <label htmlFor="prioridadeTarefaForm">Prioridade</label>
+                <Field
+                  as="select"
+                  id="prioridadeTarefaForm"
+                  name="prioridade"
+                  className="input--borda"
+                  aria-required="true"
+                >
+                  <option value="Alta">Alta</option>
+                  <option value="Média">Média</option>
+                  <option value="Baixa">Baixa</option>
+                </Field>
+                <ErrorMessage
+                  name="prioridade"
+                  component="div"
+                  className="erro-mensagem"
+                />
+              </div>
+              <div className="formulario-tarefas--coluna">
+                <label htmlFor="dataTarefaForm">Data</label>
+                <Field
+                  type="date"
+                  id="dataTarefaForm"
+                  name="data"
+                  className="input--borda"
+                  aria-required="true"
+                />
+                <ErrorMessage
+                  name="data"
+                  component="div"
+                  className="erro-mensagem"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="formulario-tarefas--linha-inteira">
+            <div className="formulario-tarefas--coluna">
+              <label htmlFor="descricaoTarefaForm">Descrição</label>
+              <Field
+                as="textarea"
+                id="descricaoTarefaForm"
+                name="descricao"
+                placeholder="Revisar bugs críticos no módulo principal."
+                className="input-textarea input--borda"
+                aria-required="true"
+              />
+              <ErrorMessage
+                name="descricao"
+                component="div"
+                className="erro-mensagem"
+              />
+            </div>
+            <div className="formulario-tarefas--coluna">
+              <label htmlFor="responsavelTarefaForm">Responsável(is):</label>
+              <div className="container__checkbox-grid">
+                {RESPONSAVEIS.map((nome) => (
+                  <div className="container__checkbox-grid--item" key={nome}>
+                    <Field
+                      type="checkbox"
+                      id={nome}
+                      name="responsaveis"
+                      value={nome}
+                      checked={values.responsaveis.includes(nome)}
+                      onChange={(e) => {
+                        const set = new Set(values.responsaveis);
+                        if (e.target.checked) {
+                          set.add(nome);
+                        } else {
+                          set.delete(nome);
+                        }
+                        setFieldValue("responsaveis", Array.from(set));
+                      }}
+                      aria-labelledby={`label-${nome}`} 
+                    />
+                    <label id={`label-${nome}`} htmlFor={nome}>
+                      {nome}
+                    </label>
+                  </div>
+                ))}
+              </div>
+              <ErrorMessage
+                name="responsaveis"
+                component="div"
+                className="erro-mensagem"
+              />
+            </div>
+          </div>
+          <div className="formulario-tarefas--linha-inteira">
+            <button
+              type="reset"
+              className="formulario-tarefas__botao"
+              aria-label="Limpar formulário"
+            >
+              Limpar
+            </button>
+            <button
+              type="submit"
+              className="formulario-tarefas__botao"
+              aria-label="Adicionar nova tarefa"
+            >
+              Adicionar
+            </button>
+          </div>
+        </Form>
+      )}
+    </Formik>
+  );
+};
 
 export default FormularioTarefas;

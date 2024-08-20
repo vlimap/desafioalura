@@ -1,4 +1,8 @@
 const mongoose = require('mongoose');
+const moment = require('moment-timezone');
+
+// Fuso horario pertin aqui Recife
+const timezone = 'America/Recife';
 
 const tarefaSchema = new mongoose.Schema({
   titulo: {
@@ -26,9 +30,9 @@ const tarefaSchema = new mongoose.Schema({
     required: [true, 'A data de entrega é obrigatória.'],
     validate: {
       validator: function(value) {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); 
-        return value >= today;
+        const today = moment().tz(timezone).startOf('day'); 
+        const dataSelecionada = moment(value).tz(timezone).startOf('day'); 
+        return dataSelecionada.isSameOrAfter(today); 
       },
       message: 'A data de entrega deve ser hoje ou no futuro.'
     }
@@ -51,11 +55,11 @@ const tarefaSchema = new mongoose.Schema({
   },
   criadoEm: {
     type: Date,
-    default: Date.now
+    default: () => moment().tz(timezone).toDate() 
   },
   atualizadoEm: {
     type: Date,
-    default: Date.now
+    default: () => moment().tz(timezone).toDate() 
   }
 });
 
@@ -64,9 +68,9 @@ function arrayLimit(val) {
   return val.length > 0;
 }
 
-// Middleware para atualizar o campo atualizadoEm
+// Middleware para atualizar o campo atualizadoEm antes de salvar
 tarefaSchema.pre('save', function (next) {
-  this.atualizadoEm = Date.now();
+  this.atualizadoEm = moment().tz(timezone).toDate(); 
   next();
 });
 

@@ -8,24 +8,29 @@
     gap: 16px;
     background-color: var(--branco);
     max-width: 960px;
-    margin: 40px auto; /* Adiciona um espaçamento entre o menu e o formulário */
+    margin: 40px auto; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
-/* Ajuste para as linhas inteiras no formulário */
+
 .formulario-tarefas--linha-inteira {
     display: flex;
     gap: 16px;
     justify-content: space-between;
+    flex-wrap: wrap; 
+    margin-bottom: 16px; 
 }
 
-/* Ajuste para dividir o formulário em duas metades */
+
 .formulario-tarefas--linha-metade {
     display: flex;
     width: 100%;
     gap: 16px;
+    flex: 0 0 48%;
+    margin-bottom: 10px; 
 }
 
-/* Ajuste para as colunas dentro das metades */
+
 .formulario-tarefas--coluna {
     display: flex;
     flex-direction: column;
@@ -33,20 +38,22 @@
     width: 100%;
 }
 
-/* Estilo para os inputs e selects */
+
 .input--borda {
     border: 1px solid var(--cinza-tundora);
     border-radius: 8px;
     padding: 8px;
     width: 100%;
+    font-size: 16px; 
 }
 
-/* Estilo para textarea */
+
 .input-textarea {
     resize: none;
+    min-height: 80px; 
 }
 
-/* Estilo para os botões */
+
 .formulario-tarefas__botao {
     border: 1px solid var(--cinza-tundora);
     border-radius: 8px;
@@ -56,30 +63,83 @@
     transition: all 0.25s;
     background-color: var(--cinza-tundora);
     color: var(--branco);
-}
-
-/* Estilo para botões ao passar o mouse */
-.formulario-tarefas__botao:hover {
-    transform: scale(1.03);
     cursor: pointer;
 }
 
-/* Estilo para o checkbox */
+.formulario-tarefas__botao:hover,
+.formulario-tarefas__botao:focus {
+    transform: scale(1.03);
+    background-color: var(--cinza-escuro); 
+}
+
+
 .container__checkbox {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
 }
 
-/* Estilo para cada item de checkbox */
+
 .container__checkbox--item {
     display: flex;
-    gap: 4px;
+    gap: 8px;
+    
 }
 
-/* Ajuste para o campo de Data */
+.container__checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 10px;
+    flex: 1;
+    align-self: flex-start; 
+}
+
+
+.container__checkbox--item label {
+    margin-left: 8px;
+}
+
+
 input[type="date"] {
     padding: 8px;
     border-radius: 8px;
     border: 1px solid var(--cinza-tundora);
+}
+
+
+.erro-mensagem {
+    color: #FF5733;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+
+@media (min-width: 601px) {
+    .formulario-tarefas--linha-inteira {
+        flex-wrap: nowrap; 
+    }
+
+    .formulario-tarefas--coluna {
+        flex: 1;
+        margin-right: 20px;
+    }
+
+    .container__checkbox-grid {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+@media (max-width: 600px) {
+    .formulario-tarefas--linha-metade {
+        flex: 0 0 100%; 
+    }
+
+    .formulario-tarefas__botao {
+        width: 100%;
+        margin-bottom: 10px; 
+    }
+
+    .container__checkbox-grid {
+        grid-template-columns: 1fr; 
+    }
 }
