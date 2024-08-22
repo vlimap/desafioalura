@@ -201,3 +201,11 @@
 .error {
   color: var(--vermelho);
 }
+.mensagem__nenhuma-tarefa {
+  text-align: center;
+  margin-top: 20px;
+  padding-bottom: 20%;
+  font-size: 18px;
+  color: #666;
+}
+

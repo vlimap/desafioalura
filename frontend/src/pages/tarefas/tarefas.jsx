@@ -26,7 +26,7 @@ function ListaDeTarefas({ showSearchBar = true }) {
 
     fetchTarefas();
   }, []);
-
+  // para leitor de tela
   useEffect(() => {
     if (liveRegionMessage) {
       setTimeout(() => setLiveRegionMessage(""), 3000); 
@@ -63,58 +63,64 @@ function ListaDeTarefas({ showSearchBar = true }) {
         />
       )}
       <h2 className="lista-tarefas__titulo">Tarefas Recentes</h2>
-      <ul className="lista__tarefas">
-        {filteredTarefas.map((tarefa) => (
-          <section key={tarefa._id} aria-labelledby={`tarefa-titulo-${tarefa._id}`}>
-            <li className="container__tarefa">
-              <div className="conteudo__tarefa">
-                <div className="tarefas__etiquetas">
-                  <div
-                    className={`etiqueta__prioridade ${getPrioridadeClass(
-                      tarefa.prioridade
-                    )}`}
-                  >
-                    {tarefa.prioridade}
-                  </div>
-                  <div className="etiqueta">
-                    {new Date(tarefa.data).toLocaleDateString("pt-BR", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    })}
-                  </div>
-                  {tarefa.responsaveis.map((resp) => (
-                    <div key={resp} className="etiqueta">
-                      {resp}
+
+      {filteredTarefas.length === 0 ? (
+        <p className="mensagem__nenhuma-tarefa">Nenhuma tarefa disponível.</p>
+      ) : (
+        <ul className="lista__tarefas">
+          {filteredTarefas.map((tarefa) => (
+            <section key={tarefa._id} aria-labelledby={`tarefa-titulo-${tarefa._id}`}>
+              <li className="container__tarefa">
+                <div className="conteudo__tarefa">
+                  <div className="tarefas__etiquetas">
+                    <div
+                      className={`etiqueta__prioridade ${getPrioridadeClass(
+                        tarefa.prioridade
+                      )}`}
+                    >
+                      {tarefa.prioridade}
                     </div>
-                  ))}
-                </div>
-                <div 
-                  className="container__tarefa--descricao"
-                  aria-describedby={`tarefa-titulo-${tarefa._id} tarefa-descricao-${tarefa._id}`}
-                >
-                  <h2 
-                    className="descricao__tarefa--titulo" 
-                    id={`tarefa-titulo-${tarefa._id}`}
+                    <div className="etiqueta">
+                      {new Date(tarefa.data).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
+                    </div>
+                    {tarefa.responsaveis.map((resp) => (
+                      <div key={resp} className="etiqueta">
+                        {resp}
+                      </div>
+                    ))}
+                  </div>
+                  <div 
+                    className="container__tarefa--descricao"
+                    aria-describedby={`tarefa-titulo-${tarefa._id} tarefa-descricao-${tarefa._id}`}
                   >
-                    {tarefa.titulo}
-                  </h2>
-                  <p id={`tarefa-descricao-${tarefa._id}`}>
-                    {tarefa.descricao}
-                  </p>
+                    <h2 
+                      className="descricao__tarefa--titulo" 
+                      id={`tarefa-titulo-${tarefa._id}`}
+                    >
+                      {tarefa.titulo}
+                    </h2>
+                    <p id={`tarefa-descricao-${tarefa._id}`}>
+                      {tarefa.descricao}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <button
-                className="tarefa__botao-deletar"
-                onClick={() => handleDelete(tarefa._id)}
-                aria-label={`Excluir tarefa ${tarefa.titulo}`}
-              >
-                <FontAwesomeIcon icon={faTrash} className="tarefa__botao-deletar__icon" />
-              </button>
-            </li>
-          </section>
-        ))}
-      </ul>
+                <button
+                  className="tarefa__botao-deletar"
+                  onClick={() => handleDelete(tarefa._id)}
+                  aria-label={`Excluir tarefa ${tarefa.titulo}`}
+                >
+                  <FontAwesomeIcon icon={faTrash} className="tarefa__botao-deletar__icon" />
+                </button>
+              </li>
+            </section>
+          ))}
+        </ul>
+      )}
+
       <div
         role="status"
         aria-live="polite"

@@ -88,7 +88,7 @@ cd backend
 2. Execute o servidor backend:
 
 ```bash
-npm start
+node src/index.js
 ```
 
 O backend será executado em [http://localhost:5000](http://localhost:5000) (ou na porta especificada no arquivo `.env`).

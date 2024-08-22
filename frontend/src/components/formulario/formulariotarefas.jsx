@@ -143,7 +143,7 @@ const FormularioTarefas = ({ onNovaTarefa }) => {
               />
               <ErrorMessage
                 name="descricao"
-                component="div"
+                component="span"
                 className="erro-mensagem"
               />
             </div>
