@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const moment = require('moment-timezone');
 
-// Fuso horario pertin aqui Recife
+// fuso horario pertin aqui de Natal Recife
 const timezone = 'America/Recife';
 
 const tarefaSchema = new mongoose.Schema({
@@ -10,12 +10,12 @@ const tarefaSchema = new mongoose.Schema({
     required: [true, 'O título é obrigatório.'],
     trim: true,
     minlength: [3, 'O título deve ter pelo menos 3 caracteres.'],
-    maxlength: [100, 'O título deve ter no máximo 100 caracteres.']
+    maxlength: [50, 'O título deve ter no máximo 100 caracteres.']
   },
   descricao: {
     type: String,
     trim: true,
-    maxlength: [500, 'A descrição deve ter no máximo 500 caracteres.']
+    maxlength: [255, 'A descrição deve ter no máximo 500 caracteres.']
   },
   prioridade: {
     type: String,
