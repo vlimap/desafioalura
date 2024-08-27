@@ -6,7 +6,7 @@ import criarTarefa from "../../api/criarTarefa";
 import { RESPONSAVEIS } from "../../constantes/constante";
 import "./formulario.css";
 
-// Validação usando Yup
+// validação usando Yup
 const validationSchema = Yup.object().shape({
   titulo: Yup.string()
     .min(5, "O título deve ter no mínimo 5 caracteres")

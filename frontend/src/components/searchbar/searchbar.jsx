@@ -5,7 +5,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const LazyIcon = () => <FontAwesomeIcon icon={faSearch} />;
 
-function SearchBar({ searchTerm, onSearchTermChange, onSearch }) {
+function SearchBar({ termoBusca, mudancaTermoBusca, onSearch }) {
   return (
     <div className="search-container" role="search" aria-label="Busca de Tarefas">
       <label htmlFor="search-input" className="sr-only">Buscar por título</label>
@@ -15,8 +15,8 @@ function SearchBar({ searchTerm, onSearchTermChange, onSearch }) {
         type="text"
         placeholder="Buscar por título..."
         className="input-busca"
-        value={searchTerm}
-        onChange={(e) => onSearchTermChange(e.target.value)}
+        value={termoBusca}
+        onChange={(e) => mudancaTermoBusca(e.target.value)}
         aria-label="Campo de busca por título"
       />
       
@@ -34,8 +34,8 @@ function SearchBar({ searchTerm, onSearchTermChange, onSearch }) {
 
 // Definindo as PropTypes
 SearchBar.propTypes = {
-  searchTerm: PropTypes.string.isRequired, 
-  onSearchTermChange: PropTypes.func.isRequired, 
+  termoBusca: PropTypes.string.isRequired, 
+  mudancaTermoBusca: PropTypes.func.isRequired, 
   onSearch: PropTypes.func.isRequired, 
 };
 

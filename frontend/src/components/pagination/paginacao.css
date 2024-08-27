@@ -1,0 +1,45 @@
+/* Estilo básico para a navegação de paginação */
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+
+.page-item {
+  margin: 0 5px;
+}
+
+
+.page-link {
+  padding: 8px 12px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  color: #292a2b;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+
+.page-link:hover {
+  background-color: #ffffff;
+  border-color: #ddd;
+}
+
+
+.page-item.active .page-link {
+  background-color: #4A4A4A;
+  color: #f9f8f8;
+}
+
+
+.page-item.disabled .page-link {
+  background-color: #ffffff;
+  color: #6c757d;
+  cursor: not-allowed;
+  pointer-events: none;
+}
