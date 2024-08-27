@@ -75,7 +75,7 @@ function ListaDeTarefas({ showSearchBar = true }) {
         <SearchBar 
           termoBusca={termoBusca}
           mudancaTermoBusca={setTermoBusca}
-          onSearch={lidarComBusca}
+          naBusca={lidarComBusca}
           showSearchBar={true}
         />
       )}

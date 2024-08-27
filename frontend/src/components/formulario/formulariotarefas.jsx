@@ -38,7 +38,7 @@ const FormularioTarefas = ({ onNovaTarefa }) => {
     responsaveis: [],
   };
 
-  const handleSubmit = async (values, { resetForm }) => {
+  const pegarFormulario = async (values, { resetForm }) => {
     const novaTarefa = {
       titulo: values.titulo,
       prioridade: values.prioridade,
@@ -60,7 +60,7 @@ const FormularioTarefas = ({ onNovaTarefa }) => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={handleSubmit}
+      onSubmit={pegarFormulario}
     >
       {({ values, setFieldValue }) => (
         <Form
