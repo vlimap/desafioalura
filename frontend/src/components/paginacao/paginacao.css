@@ -7,11 +7,9 @@
   margin-top: 20px;
 }
 
-
 .page-item {
   margin: 0 5px;
 }
-
 
 .page-link {
   padding: 8px 12px;
@@ -24,18 +22,16 @@
   transition: background-color 0.3s ease;
 }
 
-
 .page-link:hover {
   background-color: #ffffff;
   border-color: #ddd;
 }
 
-
 .page-item.active .page-link {
   background-color: #4A4A4A;
   color: #f9f8f8;
+  border-color: #4A4A4A;
 }
-
 
 .page-item.disabled .page-link {
   background-color: #ffffff;

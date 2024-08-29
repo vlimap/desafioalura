@@ -1,30 +1,24 @@
 import { useState, useEffect } from "react";
 import exibirTarefas from "../../api/exibirTarefas";
 import excluirTarefa from "../../api/excluirTarefa"; 
-import SearchBar from "../../components/searchbar/searchbar";
-import Paginacao from '../../components/pagination/paginacao';
+import SearchBar from "../../components/busca/searchbar";
+import Paginacao from '../../components/paginacao/paginacao';
 import "./tarefas.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-
 function ListaDeTarefas({ showSearchBar = true }) {
   const [tarefas, setTarefas] = useState([]);
-  const [tarefasFiltradas, setTarefasFiltradas] = useState([]);
   const [termoBusca, setTermoBusca] = useState("");
   const [error, setError] = useState(null);
-  const [liveRegionMessage, setLiveRegionMessage] = useState("");
-  
-  // Estado para a paginação
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPorPagina, setitemsPorPagina] = useState(3);
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const [itemsPorPagina] = useState(3);
 
   useEffect(() => {
     const fetchTarefas = async () => {
       try {
         const tarefasObtidas = await exibirTarefas();
-        setTarefas(tarefasObtidas);
-        setTarefasFiltradas(tarefasObtidas);
+        setTarefas(ordenarTarefas(tarefasObtidas));
       } catch (error) {
         setError("Não foi possível carregar as tarefas. Tente novamente mais tarde.");
       }
@@ -32,42 +26,37 @@ function ListaDeTarefas({ showSearchBar = true }) {
 
     fetchTarefas();
   }, []);
-  
-  useEffect(() => {
-    if (liveRegionMessage) {
-      setTimeout(() => setLiveRegionMessage(""), 3000); 
-    }
-  }, [liveRegionMessage]);
 
-  // Função de busca
-  const lidarComBusca = () => {
-    const filtered = tarefas.filter(tarefa => 
-      tarefa.titulo.toLowerCase().includes(termoBusca.toLowerCase())
-    );
-    setTarefasFiltradas(filtered);
-    setCurrentPage(1); 
+  const ordenarTarefas = (tarefas) => {
+    return tarefas.sort((a, b) => {
+      const prioridades = { "Alta": 3, "Média": 2, "Baixa": 1 };
+      if (prioridades[b.prioridade] !== prioridades[a.prioridade]) {
+        return prioridades[b.prioridade] - prioridades[a.prioridade];
+      }
+      return new Date(b.data) - new Date(a.data);
+    });
   };
 
-  // Função de exclusão
+  const tarefasFiltradas = tarefas.filter(tarefa =>
+    tarefa.titulo.toLowerCase().includes(termoBusca.toLowerCase())
+  );
+
   const lidarComExclusao = async (id) => {
     try {
       await excluirTarefa(id); 
-      const atualizarTarefas = tarefas.filter((tarefa) => tarefa._id !== id);
-      setTarefas(atualizarTarefas);
-      setTarefasFiltradas(atualizarTarefas);
+      const tarefasAtualizadas = tarefas.filter((tarefa) => tarefa._id !== id);
+      setTarefas(ordenarTarefas(tarefasAtualizadas));
       setLiveRegionMessage(`Tarefa excluída: ${id}`);
     } catch (error) {
       console.error("Erro ao excluir tarefa:", error);
     }
   };
 
-  // Cálculo das tarefas a serem exibidas na página atual
-  const indiceUltimoItem = currentPage * itemsPorPagina;
+  const indiceUltimoItem = paginaAtual * itemsPorPagina;
   const indicePrimeiroItem = indiceUltimoItem - itemsPorPagina;
   const tarefasAtuais = tarefasFiltradas.slice(indicePrimeiroItem, indiceUltimoItem);
 
-  // Função para mudar a página
-  const pagina = (numeroPaginas) => setCurrentPage(numeroPaginas);
+  const mudarPagina = (numeroPagina) => setPaginaAtual(numeroPagina);
 
   return (
     <div className="conteudo-principal">
@@ -75,11 +64,13 @@ function ListaDeTarefas({ showSearchBar = true }) {
         <SearchBar 
           termoBusca={termoBusca}
           mudancaTermoBusca={setTermoBusca}
-          naBusca={lidarComBusca}
+          naBusca={() => setPaginaAtual(1)} 
           showSearchBar={true}
         />
       )}
       <h2 className="lista-tarefas__titulo">Tarefas Recentes</h2>
+
+      {error && <p className="erro-mensagem">{error}</p>}
 
       {tarefasAtuais.length === 0 ? (
         <p className="mensagem__nenhuma-tarefa">Nenhuma tarefa disponível.</p>
@@ -141,17 +132,9 @@ function ListaDeTarefas({ showSearchBar = true }) {
       <Paginacao 
         itemsPorPagina={itemsPorPagina}
         totalItems={tarefasFiltradas.length}
-        pagina={pagina}
-        paginaAtual={currentPage} 
+        pagina={mudarPagina}
+        paginaAtual={paginaAtual} 
       />
-
-      <div
-        role="status"
-        aria-live="polite"
-        style={{ position: "absolute", width: "1px", height: "1px", overflow: "hidden" }}
-      >
-        {liveRegionMessage}
-      </div>
     </div>
   );
 }

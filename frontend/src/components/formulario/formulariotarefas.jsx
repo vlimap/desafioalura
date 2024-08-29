@@ -29,7 +29,7 @@ const validationSchema = Yup.object().shape({
     .required("Selecione ao menos um responsável"),
 });
 
-const FormularioTarefas = ({ onNovaTarefa }) => {
+const FormularioTarefas = ({ emNovaTarefa }) => {
   const initialValues = {
     titulo: "",
     prioridade: "Alta",
@@ -49,7 +49,7 @@ const FormularioTarefas = ({ onNovaTarefa }) => {
 
     try {
       const tarefaCriada = await criarTarefa(novaTarefa);
-      onNovaTarefa(tarefaCriada);
+      emNovaTarefa(tarefaCriada);
       resetForm();
     } catch (error) {
       console.error("Erro ao criar tarefa:", error);
