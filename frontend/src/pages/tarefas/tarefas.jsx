@@ -7,6 +7,7 @@ import "./tarefas.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
+// no criar tarefa, será false para a busca
 function ListaDeTarefas({ showSearchBar = true }) {
   const [tarefas, setTarefas] = useState([]);
   const [termoBusca, setTermoBusca] = useState("");
@@ -46,7 +47,6 @@ function ListaDeTarefas({ showSearchBar = true }) {
       await excluirTarefa(id); 
       const tarefasAtualizadas = tarefas.filter((tarefa) => tarefa._id !== id);
       setTarefas(ordenarTarefas(tarefasAtualizadas));
-      setLiveRegionMessage(`Tarefa excluída: ${id}`);
     } catch (error) {
       console.error("Erro ao excluir tarefa:", error);
     }
