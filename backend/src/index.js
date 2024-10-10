@@ -9,8 +9,16 @@ dotenv.config();
 
 // Configuração do aplicativo Express
 const app = express();
-app.use(cors());
-app.use(express.json()); // parsear o corpo das requisições como JSON
+
+// Configurações do CORS
+const corsOptions = {
+  origin: process.env.uri, // Substitua pelo seu domínio frontend
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Habilitar se você estiver enviando cookies ou autenticação
+};
+
+app.use(cors(corsOptions)); // Aplicar as configurações de CORS
+app.use(express.json()); // Parsear o corpo das requisições como JSON
 
 // Rotas
 app.use('/api/tarefas', taskRoutes);
@@ -26,4 +34,4 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-module.exports = app; 
+module.exports = app;
