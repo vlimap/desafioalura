@@ -6,10 +6,7 @@ const Task = require('../../../tarefas/models/taskModel');
 describe('Task Controller', () => {
   beforeAll(async () => {
     // Conectar ao banco de dados de teste
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect(process.env.MONGODB_URI);
   });
 
   afterAll(async () => {
@@ -62,8 +59,17 @@ describe('Task Controller', () => {
   });
 
   it('deve deletar uma tarefa pelo ID', async () => {
+    // Certifique-se de que a tarefa ainda existe antes de deletá-la
+    const task = await Task.findById(taskId);
+    expect(task).not.toBeNull(); // Verifica se a tarefa foi criada
+
     const response = await request(app).delete(`/api/tarefas/${taskId}`);
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('message', 'Tarefa deletada com sucesso');
+
+    // Verifique se a tarefa foi realmente deletada
+    const deletedTask = await Task.findById(taskId);
+    expect(deletedTask).toBeNull(); // A tarefa deve ser null após a deleção
   });
 });
+

@@ -26,4 +26,4 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-module.exports = app; // Exporte o app para que ele possa ser usado nos testes
+module.exports = app; 

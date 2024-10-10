@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const taskController = require('../controllers/taskController'); // Importe o controlador das tarefas
+const taskController = require('../controllers/taskController'); 
 
 // rotas e métodos correspondentes no controlador
 router.get('/', taskController.getAllTasks);

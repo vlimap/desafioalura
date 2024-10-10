@@ -2,23 +2,25 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 describe('Database Connection', () => {
-  it('deve conectar ao banco de dados com sucesso', async () => {
-    const connection = await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+  beforeAll(async () => {
+    // Conectar ao banco de dados antes de todos os testes
+    await mongoose.connect(process.env.MONGODB_URI);
+  });
 
-    expect(connection.connection.readyState).toBe(1); // 1 significa conectado
+  afterAll(async () => {
+    // Desconectar do banco de dados após todos os testes
+    await mongoose.connection.close();
+  });
+
+  it('deve conectar ao banco de dados com sucesso', async () => {
+    expect(mongoose.connection.readyState).toBe(1); // 1 indica conexão aberta
   });
 
   it('deve falhar ao conectar com uma URI inválida', async () => {
     try {
-      await mongoose.connect('mongodb://invaliduri', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      });
+      await mongoose.connect('mongodb://invaliduri');
     } catch (error) {
-      expect(error).toBeDefined();
+      expect(error).toBeDefined(); // Espera que um erro seja lançado
     }
   });
 });
