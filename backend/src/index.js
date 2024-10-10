@@ -12,7 +12,7 @@ const app = express();
 
 // Configurações do CORS
 const corsOptions = {
-  origin: process.env.uri, // Substitua pelo seu domínio frontend
+  origin: process.env.URI, // Substitua pelo seu domínio frontend
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Habilitar se você estiver enviando cookies ou autenticação
 };
