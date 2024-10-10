@@ -8,9 +8,10 @@ const app = express();
 
 // Configurações do CORS para permitir acesso do seu frontend
 const corsOptions = {
-  origin: '*',
+  origin: process.env.URI, // Aqui deve estar o URL do seu frontend
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: false, // Se estiver usando cookies ou autenticação
+  optionsSuccessStatus: 204 // Para compatibilidade com alguns navegadores antigos
 };
 
 app.use(cors(corsOptions));
