@@ -10,7 +10,7 @@ const app = express();
 const corsOptions = {
   origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Se estiver usando cookies ou autenticação
+  credentials: false, // Se estiver usando cookies ou autenticação
 };
 
 app.use(cors(corsOptions));
