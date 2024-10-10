@@ -4,27 +4,33 @@ const mongoose = require('./config/config');
 const taskRoutes = require('./tarefas/routes/routes'); 
 const cors = require('cors');
 
-// Carregar variáveis de ambiente do arquivo .env
 dotenv.config();
 
-// Configuração do aplicativo Express
 const app = express();
 
 // Configurações do CORS
 const corsOptions = {
-  origin: '*', // Substitua pelo seu domínio frontend
+  origin: process.env.URI, 
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Habilitar se você estiver enviando cookies ou autenticação
+  credentials: true, // Se você estiver enviando cookies ou autenticação
+  allowedHeaders: [
+    'X-CSRF-Token', 
+    'X-Requested-With', 
+    'Accept', 
+    'Accept-Version', 
+    'Content-Length', 
+    'Content-MD5', 
+    'Content-Type', 
+    'Date', 
+    'X-Api-Version'
+  ],
 };
 
-app.use(cors(corsOptions)); // Aplicar as configurações de CORS
-app.use(express.json()); // Parsear o corpo das requisições como JSON
+app.use(cors(corsOptions));
+app.use(express.json());
 
 // Rotas
 app.use('/api/tarefas', taskRoutes);
-
-// Servir arquivos estáticos (somente se necessário para produção)
-app.use(express.static('build'));
 
 // Verifique o ambiente e inicie o servidor apenas se não for o ambiente de teste
 if (process.env.NODE_ENV !== 'test') {
